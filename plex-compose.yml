@@ -64,21 +64,21 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${MEDIA_VOLUME}/data/media"
+      device: ":${MEDIA_VOLUME}"
 
   overseerr: # Overseerr app data.
     driver: local
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOCKER_VOLUME}/docker_data/overseerr"
+      device: ":${DOCKER_VOLUME}/overseerr"
 
   plex: # Plex app data.
     driver: local
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOCKER_VOLUME}/docker_data/plex"
+      device: ":${DOCKER_VOLUME}/plex"
 
   plex-transcode: # Plex Transcode
     driver: local
