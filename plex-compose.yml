@@ -33,7 +33,7 @@ services:
 
   plex:
     # See more: https://docs.linuxserver.io/images/docker-plex/
-    image: lscr.io/linuxserver/plex:latest
+    image: plexinc/pms-docker:latest
     container_name: plex
     restart: always
     secrets:
@@ -41,7 +41,8 @@ services:
     env_file: ./env/plex.env
     volumes:
       - plex:/config
-      - media:/media
+      - plex-transcode:/transcode
+      - media:/data
     healthcheck:
       test: curl -f http://localhost:32400/identity || exit 1
       interval: 10s
@@ -84,3 +85,6 @@ volumes:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
       device: ":${NFS_VOLUME}/docker_data/plex"
+
+  plex-transcode:
+    driver: local
