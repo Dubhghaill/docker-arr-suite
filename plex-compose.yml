@@ -1,9 +1,5 @@
 ---
 
-secrets:
-  plex-claim:
-    file: ./secrets/plex-claim.secret
-
 services:
   overseerr:
     # See more: https://docs.overseerr.dev/getting-started/installation
@@ -36,15 +32,13 @@ services:
     image: plexinc/pms-docker:latest
     container_name: plex
     restart: always
-    secrets:
-      - plex-claim
     env_file: ./env/plex.env
     volumes:
       - plex:/config
       - plex-transcode:/transcode
       - media:/data
     healthcheck:
-      test: curl -f http://localhost:32400/identity || exit 1
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:32400/identity || curl -fsS http://$(hostname -i):32400/identity || exit 1"]
       interval: 10s
       timeout: 3s
       start_period: 60s
