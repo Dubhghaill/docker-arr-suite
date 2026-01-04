@@ -52,11 +52,11 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOWNLOAD_VOLUME}/data/torrents"
+      device: ":${DOWNLOAD_VOLUME}/torrents"
 
   bittorrent: # qBittorrent app data.
     driver: local
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOCKER_VOLUME}/docker_data/bittorrent"
+      device: ":${DOCKER_VOLUME}/bittorrent"
