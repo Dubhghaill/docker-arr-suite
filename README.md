@@ -23,7 +23,7 @@ Check out the full guide here: https://passthebits.com/
 ## Quick Start
 Carefully read the entire compose file before deploying. Comments are included with details and additional supported variables. Confirm that all uncommented service variables and volumes are correctly configured before deploying. The compose file is available on GitHub.
 ```
-git clone https://github.com/pvd-nerd/docker-arr-suite $HOME/media_stack
+git clone https://github.com/Dubhghaill/docker-arr-suite $HOME/media_stack
 cd $HOME/media_stack
 chmod +x setup.sh
 
