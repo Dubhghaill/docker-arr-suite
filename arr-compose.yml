@@ -137,25 +137,25 @@ volumes:
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOCKER_VOLUME}/docker_data/sonarr"
+      device: ":${DOCKER_VOLUME}/sonarr"
 
   radarr: # Radarr app data.
     driver: local
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOCKER_VOLUME}/docker_data/radarr"
+      device: ":${DOCKER_VOLUME}/radarr"
 
   prowlarr: # Prowlarr app data.
     driver: local
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOCKER_VOLUME}/docker_data/prowlarr"
+      device: ":${DOCKER_VOLUME}/prowlarr"
 
   unpackerr: # unPackerr app data.
     driver: local
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOCKER_VOLUME}/docker_data/unpackerr"
+      device: ":${DOCKER_VOLUME}/unpackerr"
