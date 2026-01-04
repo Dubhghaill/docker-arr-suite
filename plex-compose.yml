@@ -6,7 +6,7 @@ services:
     image: sctx/overseerr:latest
     container_name: overseerr
     restart: always
-    env_file: ./env/plex.env
+    env_file: ./env/overseerr.env
     volumes:
       - overseerr:/app/config
     healthcheck:
@@ -80,5 +80,5 @@ volumes:
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
       device: ":${NFS_VOLUME}/docker_data/plex"
 
-  plex-transcode:
+  plex-transcode: # Plex Transcode
     driver: local
