@@ -2,7 +2,7 @@
 
 services:
   traefik:
-    image: traefik:v3
+    image: traefik
     container_name: traefik
     restart: always
     command:
@@ -15,8 +15,6 @@ services:
       # Dashboard/API
       - --api=true
       - --api.dashboard=true
-      # Healthcheck endpoint
-      - --ping=true
       # Backend TLS verification
       - --serversTransport.insecureSkipVerify=true
       # ACME DNS-01 (Cloudflare)
@@ -45,10 +43,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - letsencrypt:/letsencrypt
     healthcheck:
-      test: ["CMD", "traefik", "healthcheck"]
+      test: netstat -ptan | grep -E "443.*LISTEN" || exit 1
       interval: 10s
       timeout: 3s
-      start_period: 30s
+      start_period: 60s
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
