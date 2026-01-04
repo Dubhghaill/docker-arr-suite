@@ -1,11 +1,5 @@
 ---
 
-secrets:
-  bittorrent-user:
-    file: ./secrets/bittorrent-user.secret
-  bittorrent-password:
-    file: ./secrets/bittorrent-password.secret
-
 services:
   bittorrent:
     # See more: https://docs.linuxserver.io/images/docker-qbittorrent
@@ -40,9 +34,6 @@ services:
     image: mjmeli/qbittorrent-port-forward-gluetun-server
     container_name: bittorrent_port_forwarder
     restart: always
-    secrets:
-      - bittorrent-user
-      - bittorrent-password
     env_file: ./env/bittorrent.env
     depends_on:
       bittorrent:
