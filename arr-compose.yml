@@ -1,11 +1,5 @@
 ---
 
-secrets:
-  radarr-api:
-    file: ./secrets/radarr-api.secret
-  sonarr-api:
-    file: ./secrets/sonarr-api.secret
-
 services:
   sonarr:
     # See more: https://docs.linuxserver.io/images/docker-sonarr
@@ -112,9 +106,6 @@ services:
     image: golift/unpackerr
     container_name: unpackerr
     restart: always
-    secrets:
-      - radarr-api
-      - sonarr-api
     env_file: ./env/arr.env
     volumes:
       - data:/media
