@@ -25,7 +25,7 @@ Carefully read the entire compose file before deploying. Comments are included w
 ```
 git clone https://github.com/pvd-nerd/docker-arr-suite $HOME/media_stack
 cd $HOME/media_stack
-chmod +x media.sh
+chmod +x setup.sh
 
 # Pull all container images before launch.
 sudo docker compose pull
