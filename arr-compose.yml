@@ -2,30 +2,26 @@
 
 services:
   sonarr:
+    container_name: sonarr  
     # See more: https://docs.linuxserver.io/images/docker-sonarr
     image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
     restart: always
     network_mode: service:gluetun
     env_file: ./env/arr.env
     volumes:
       - sonarr:/config
-      - data:/media
+      - media:/media
+      - downloads:/downloads
     healthcheck:
       test: curl -f http://localhost:8989/ping || exit 1
       interval: 10s
       timeout: 3s
       start_period: 60s
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)
-      - traefik.http.routers.sonarr.entrypoints=websecure
-      - traefik.http.services.sonarr.loadbalancer.server.port=8989
     depends_on:
       gluetun:
         condition: service_healthy
         restart: true
-      traefik:
+      caddy:
         condition: service_healthy
         restart: true
       bittorrent:
@@ -34,30 +30,26 @@ services:
       
 
   radarr:
+    container_name: radarr
     # See more: https://docs.linuxserver.io/images/docker-radarr
     image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
     restart: always
     network_mode: service:gluetun
     env_file: ./env/arr.env
     volumes:
       - radarr:/config
-      - data:/media
+      - media:/media
+      - downloads:/downloads
     healthcheck:
       test: curl -f http://localhost:7878/ping || exit 1
       interval: 10s
       timeout: 3s
       start_period: 60s
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)
-      - traefik.http.routers.radarr.entrypoints=websecure
-      - traefik.http.services.radarr.loadbalancer.server.port=7878
     depends_on:
       gluetun:
         condition: service_healthy
         restart: true
-      traefik:
+      caddy:
         condition: service_healthy
         restart: true
       bittorrent:
@@ -65,30 +57,26 @@ services:
         restart: true
 
   prowlarr:
+    container_name: prowlarr
     # See more: https://docs.linuxserver.io/images/docker-prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
-    container_name: prowlarr
     restart: always
     network_mode: service:gluetun
     env_file: ./env/arr.env
     volumes: 
       - prowlarr:/config
-      - data:/media
+      - media:/media
+      - downloads:/downloads
     healthcheck:
       test: curl -f http://localhost:9696/ping || exit 1
       interval: 10s
       timeout: 3s
       start_period: 60s
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${DOMAIN}`)
-      - traefik.http.routers.prowlarr.entrypoints=websecure
-      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
     depends_on:
       gluetun:
         condition: service_healthy
         restart: true
-      traefik:
+      caddy:
         condition: service_healthy
         restart: true
       bittorrent:
@@ -102,14 +90,15 @@ services:
         restart: true
 
   unpackerr:
+    container_name: unpackerr
     # See more: https://unpackerr.zip/docs/install/compose
     image: golift/unpackerr
-    container_name: unpackerr
     restart: always
     env_file: ./env/arr.env
     volumes:
-      - data:/media
       - unpackerr:/config
+      - media:/media
+      - downloads:/downloads
     depends_on:
       sonarr:
         condition: service_healthy
@@ -125,12 +114,19 @@ networks:
     attachable: true
 
 volumes:
-  data: # Sonarr, Radarr, Prowlarr, and Unpackerr data mount
+  downloads:
     driver: local
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOCKER_VOLUME}/data"
+      device: ":${DOWNLOADS_VOLUME}"
+
+  media:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
+      device: ":${MEDIA_VOLUME}"
 
   sonarr: # Sonarr app data.
     driver: local
