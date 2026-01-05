@@ -64,6 +64,7 @@ volumes:
   caddy_config:
     driver: local
     driver_opts:
+      type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
       device: ":${DOCKER_VOLUME}/caddy/config"
 
