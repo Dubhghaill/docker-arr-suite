@@ -10,22 +10,17 @@ services:
     env_file: ./env/bittorrent.env
     volumes:
       - bittorrent:/config
-      - torrent:/media
+      - downloads:/downloads
     healthcheck:
       test: curl -f http://localhost:8088 || exit 1
       interval: 10s
       timeout: 3s
       start_period: 60s
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.bittorrent.rule=Host(`bittorrent.${DOMAIN}`)
-      - traefik.http.routers.bittorrent.entrypoints=websecure
-      - traefik.http.services.bittorrent.loadbalancer.server.port=8088
     depends_on:
       gluetun:
         condition: service_healthy
         restart: true
-      traefik:
+      caddy:
         condition: service_healthy
         restart: true
 
@@ -47,16 +42,16 @@ networks:
     attachable: true
 
 volumes:
-  torrent: # torrent data mount
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
-      device: ":${DOWNLOAD_VOLUME}/torrents"
-
   bittorrent: # qBittorrent app data.
     driver: local
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
       device: ":${DOCKER_VOLUME}/bittorrent"
+
+  downloads:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_SERVER},rw,tcp,nolock,hard,wsize=65536,rsize=65536"
+      device: ":${DOWNLOADS_VOLUME}"
