@@ -16,10 +16,11 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     healthcheck:
-      test: netstat -ptan | grep -E "443.*LISTEN" || exit 1
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 443 || exit 1"]
       interval: 10s
       timeout: 3s
-      start_period: 60s
+      start_period: 20s
+      retries: 5
 
   gluetun:
     container_name: gluetun
